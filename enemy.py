@@ -36,6 +36,7 @@ class Enemy(pygame.sprite.Sprite):
             self.alive = 0
             self.kill()
             # print('dead')
+        else: self.alive = 1
 
     @abstractclassmethod
     def walk(self):
