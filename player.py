@@ -14,7 +14,7 @@ class Player (pygame.sprite.Sprite):
         self.posy = resolution[1]/2 - self.__height
         
         self.image = pygame.Surface([self.__width, self.__height])
-        self.image.fill((0,255,0))
+        self.image.fill((0, 255, 0))
 
         self.rect = self.image.get_rect()
         

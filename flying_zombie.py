@@ -1,5 +1,7 @@
 from enemy import Enemy
 import random as rd
+
+
 class Flying_zombie(Enemy):
     def __init__(self, resolution):
         super().__init__(resolution, 1, 0.1, 20, 20)

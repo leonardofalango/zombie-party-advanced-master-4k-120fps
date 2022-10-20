@@ -1,5 +1,6 @@
 from player import Player
-from enemy import Normal_zombie, Flying_zombie
+from normal_zombie import Normal_zombie
+from flying_zombie import Flying_zombie
 
 import pygame
 import sys
@@ -32,21 +33,15 @@ for i in range(12):
     all_sprites.add(enemy)
     all_enemies.add(enemy)
     flying_zombies.add(enemy)
-    
-    
 
-while 1:    
+while 1:
     clock.tick(60)
     player.update()
-    surface.fill((0,0,0))
+    surface.fill((0, 0, 0))
     all_sprites.draw(surface)
 
-    
-
-
     pressed = pygame.key.get_pressed()
-    
-    
+
     if pressed[pygame.K_UP] or pressed[pygame.K_w]:
         player.walk('up')
 
@@ -58,9 +53,6 @@ while 1:
 
     if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
         player.walk('right')
-    
-    
-    
 
     for inimigo in flying_zombies:
         inimigo.walk()
@@ -73,15 +65,13 @@ while 1:
         all_sprites.add(enemy)
         all_enemies.add(enemy)
         flying_zombies.add(enemy)
-    
-    
-    
+
     # Tomando dano:
     damages = [s for s in all_enemies if s.rect.collidepoint((player.rect.x, player.rect.y))]
     if len(damages) >= 1:
         for i in all_enemies:
             player.take_damage(i.atk)
-    
+
     # Atirando / Dando dano
     pygame.display.update()
     for event in pygame.event.get():
@@ -93,11 +83,6 @@ while 1:
                 all_sprites.remove(died_enemy)
                 all_enemies.remove(died_enemy)
 
-            
-        
-        
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit(0)
-
-

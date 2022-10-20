@@ -37,6 +37,10 @@ class Enemy(pygame.sprite.Sprite):
             self.kill()
             # print('dead')
 
+    @abstractclassmethod
+    def walk(self):
+        pass
+
         
     
     def damage(self, damage):
