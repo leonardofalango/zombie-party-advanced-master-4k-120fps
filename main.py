@@ -35,13 +35,15 @@ for i in range(12):
     
     
 
-while 1:
+while 1:    
     clock.tick(60)
     player.update()
     surface.fill((0,0,0))
     all_sprites.draw(surface)
 
     
+
+
     pressed = pygame.key.get_pressed()
     
     
@@ -63,12 +65,10 @@ while 1:
     for inimigo in flying_zombies:
         inimigo.walk()
         if inimigo.is_alive() == 0:
-            all_sprites.remove(inimigo)
-            flying_zombies.remove(inimigo)
-            all_sprites.remove(inimigo)
+            pass
 
-    if len(all_enemies) < 4:
-        print('spawn')
+    if len(all_enemies) < 40:
+        # print('spawn')
         enemy = Flying_zombie(resolution)
         all_sprites.add(enemy)
         all_enemies.add(enemy)
@@ -76,10 +76,16 @@ while 1:
     
     
     
-
+    # Tomando dano:
+    damages = [s for s in all_enemies if s.rect.collidepoint((player.rect.x, player.rect.y))]
+    if len(damages) >= 1:
+        for i in all_enemies:
+            player.take_damage(i.atk)
+    
+    # Atirando / Dando dano
     pygame.display.update()
     for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONUP:
+        if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
             mousex, mousey = pygame.mouse.get_pos()
             clicked_sprites = [s for s in all_enemies if s.rect.collidepoint((mousex, mousey))]
             # print(clicked_sprites)

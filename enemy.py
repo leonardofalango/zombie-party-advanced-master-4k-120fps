@@ -11,7 +11,7 @@ class Enemy(pygame.sprite.Sprite):
         self.__resolution = resolution
         
         self.__hp = hp
-        self.__atk = atk
+        self.atk = atk
 
         self.alive = 1
         
@@ -28,18 +28,15 @@ class Enemy(pygame.sprite.Sprite):
         # print(self.rect.x, self.rect.y)
     
     def is_alive(self):
-        if self.__hp <= 0:
+        if self.__hp <= 0 or self.rect.x < -10 or (
+                self.rect.x > self.__resolution[0] + self.rect.width or
+                self.rect.y < -10 or
+                self.rect.y > (self.__resolution[1] + self.rect.height)):
+            
             self.alive = 0
-            print('dead')
-        
-        if self.rect.x < -10:
-            self.alive = 0
-        if self.rect.x > (self.__resolution[0] + self.rect.width) * 1.1:
-            self.alive = 0
-        if self.rect.y < -10:
-            self.alive = 0
-        if self.rect.y > (self.__resolution[1] + self.rect.height) * 1.1:
-            self.alive = 0
+            self.kill()
+            # print('dead')
+
         
     
     def damage(self, damage):
@@ -49,7 +46,8 @@ class Enemy(pygame.sprite.Sprite):
 
 class Normal_zombie(Enemy):
     def __init__(self, resolution):
-        super().__init__(resolution, 100, 20, resolution[0]/15 * 0.75, resolution[1]/10 * 0.75)
+        width, height = resolution[0]/15 * 0.75, resolution[1]/10 * 0.75
+        super().__init__(resolution, 100, 20, width, height)
         self.__walk_distance = max(resolution) / 50 * 0.1
     
     def __str__(self):

@@ -6,8 +6,8 @@ class Player (pygame.sprite.Sprite):
 
         self.__skin = skin
     
-        self.__width = resolution[0]/15 * 0.75
-        self.__height = resolution[1]/10 * 0.75
+        self.__width = resolution[0]/20 * 0.75
+        self.__height = resolution[1]/13 * 0.75
         self.__walk_distance = max(resolution) / 50 * 0.3
 
         self.posx = resolution[0]/2 - self.__width
@@ -17,8 +17,11 @@ class Player (pygame.sprite.Sprite):
         self.image.fill((0,255,0))
 
         self.rect = self.image.get_rect()
+        
         self.__cooldown = False
         self.__atk = 20
+        self.__armour = 0
+        self.__hp = 1000
         
     
     def walk(self, direction):
@@ -43,5 +46,11 @@ class Player (pygame.sprite.Sprite):
                 died.append(enemy)
          
         return died
-            
+    
+    def take_damage(self, value):
+        value = value * (1-self.__armour)
+        self.__hp -= value
+        if self.__hp <= 0:
+            self.kill()
+    
 
