@@ -1,5 +1,5 @@
 import pygame
-
+from weapons import Glock
 class Player (pygame.sprite.Sprite):
     def __init__(self, resolution, skin) -> None:
         super().__init__()
@@ -19,10 +19,11 @@ class Player (pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         
         self.__cooldown = False
-        self.__atk = 20
+        self.__atk = 1
         self.__armour = 0
         self.__hp = 1000
-        self.__wepon = None
+        self.weapons = [Glock(resolution)]
+
         
     
     def walk(self, direction):
@@ -39,19 +40,14 @@ class Player (pygame.sprite.Sprite):
             self.rect.x += self.__walk_distance
     
     def shoot(self, x, y, enemies):
-        died = []
-        for enemy in enemies:
-            # print(enemy)
-            enemy.damage(self.__atk)
-            if not (enemy.is_alive()):
-                died.append(enemy)
+        print(self.weapons)
          
-        return died
+        return self.__atk + self.weapons[-1].damage
     
     def take_damage(self, value):
         value = value * (1-self.__armour)
         self.__hp -= value
         if self.__hp <= 0:
             self.kill()
-    
+
 

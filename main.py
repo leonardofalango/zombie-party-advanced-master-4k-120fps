@@ -50,12 +50,14 @@ while 1:
         player.walk('right')
 
     if pygame.sprite.spritecollide(player, weapons, True):
-        print("asdpoij")
 
-    # Atirando / Dando dano
+
     pygame.display.update()
     for event in pygame.event.get():
 
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit(0)
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            print(player.shoot(1,2,[1,2,3]))
