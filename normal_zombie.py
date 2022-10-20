@@ -1,5 +1,6 @@
 from enemy import Enemy
 import random as rd
+
 class Normal_zombie(Enemy):
     def __init__(self, resolution):
         width, height = resolution[0] / 15 * 0.75, resolution[1] / 10 * 0.75

@@ -1,5 +1,8 @@
 from player import Player
-from enemy import Normal_zombie, Flying_zombie
+from normal_zombie import Normal_zombie
+from tank_zombie import Tank_zombie
+from flying_zombie import Flying_zombie
+
 
 import pygame
 import sys
@@ -27,7 +30,9 @@ all_sprites.add(normal_zombie)
 all_enemies.add(normal_zombie)
 
 flying_zombies = pygame.sprite.Group()
-for i in range(12):
+tank_zombies = pygame.sprite.Group()
+
+for i in range(5):
     enemy = Flying_zombie(resolution)
     all_sprites.add(enemy)
     all_enemies.add(enemy)
@@ -67,14 +72,51 @@ while 1:
         if inimigo.is_alive() == 0:
             pass
 
-    if len(all_enemies) < 40:
+    if len(all_enemies) < 1:
         # print('spawn')
         enemy = Flying_zombie(resolution)
         all_sprites.add(enemy)
         all_enemies.add(enemy)
         flying_zombies.add(enemy)
-    
-    
+
+for i in range(3):
+    enemy = Tank_zombie(resolution)
+    all_sprites.add(enemy)
+    all_enemies.add(enemy)
+    tank_zombies.add(enemy)
+
+while 1:
+    clock.tick(60)
+    player.update()
+    surface.fill((0, 0, 0))
+    all_sprites.draw(surface)
+
+    pressed = pygame.key.get_pressed()
+
+    if pressed[pygame.K_UP] or pressed[pygame.K_w]:
+        player.walk('up')
+
+    if pressed[pygame.K_DOWN] or pressed[pygame.K_s]:
+        player.walk('down')
+
+    if pressed[pygame.K_LEFT] or pressed[pygame.K_a]:
+        player.walk('left')
+
+    if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
+        player.walk('right')
+
+    for inimigo in tank_zombies:
+        inimigo.walk()
+        if inimigo.is_alive() == 0:
+            pass
+
+    if len(all_enemies) < 1:
+        # print('spawn')
+        enemy = Tank_zombie(resolution)
+        all_sprites.add(enemy)
+        all_enemies.add(enemy)
+        tank_zombies.add(enemy)
+
     
     # Tomando dano:
     damages = [s for s in all_enemies if s.rect.collidepoint((player.rect.x, player.rect.y))]
@@ -99,5 +141,7 @@ while 1:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit(0)
+
+
 
 
