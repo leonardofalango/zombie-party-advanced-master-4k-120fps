@@ -21,7 +21,7 @@ class Player (pygame.sprite.Sprite):
         self.__cooldown = False
         self.__atk = 20
         self.__armour = 0
-        self.__hp = 1000
+        self.__hp = 10
         
     
     def walk(self, direction):

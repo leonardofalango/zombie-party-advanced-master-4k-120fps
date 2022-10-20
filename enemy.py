@@ -4,7 +4,7 @@ import random as rd
 
 # @abstract_class
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, resolution, hp, atk, width, height):
+    def __init__(self, resolution, hp, atk, width, height, color = (255, 0, 0)):
         super().__init__()
         self.__width = width
         self.__height = height
@@ -16,7 +16,7 @@ class Enemy(pygame.sprite.Sprite):
         self.alive = 1
         
         self.image = pygame.Surface([self.__width, self.__height])
-        self.image.fill((255,0,0))
+        self.image.fill(color)
 
         self.rect = self.image.get_rect()
         
