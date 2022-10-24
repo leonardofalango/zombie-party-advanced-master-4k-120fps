@@ -4,10 +4,10 @@ import random as rd
 
 # @abstract_class
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, resolution, hp, atk, width, height):
+    def __init__(self, resolution, hp, atk, size, vel):
         super().__init__()
-        self.__width = width
-        self.__height = height
+        self.__width = size[0]
+        self.__height = size[1]
         self.__resolution = resolution
         
         self.__hp = hp
@@ -16,12 +16,14 @@ class Enemy(pygame.sprite.Sprite):
         self.alive = 1
         
         self.image = pygame.Surface([self.__width, self.__height])
-        self.image.fill((255,0,0))
+        self.image.fill((255, 0, 0))
 
         self.rect = self.image.get_rect()
         
         self.rect.x = 50
         self.rect.y = 50
+
+        self.__vel = vel
 
         # self.rect.x = rd.randint(0 - resolution[0] * 0.3, resolution[0] + resolution[0] * 0.3)
         # self.rect.y = rd.randint(0 - resolution[1] * 0.3, resolution[1] + resolution[1] * 0.3)
@@ -37,9 +39,19 @@ class Enemy(pygame.sprite.Sprite):
             self.kill()
             # print('dead')
 
-    @abstractclassmethod
-    def walk(self):
-        pass
+    def walk(self, player):
+        destx = player.rect.x
+        desty = player.rect.y
+        # print(self.rect.x, self.rect.y,"|",destx, desty)
+        if (destx < self.rect.x):
+            self.rect.x -= self.__vel
+        elif (destx > self.rect.x):
+            self.rect.x += self.__vel
+
+        if (desty < self.rect.y):
+            self.rect.y -= self.__vel
+        else:
+            self.rect.y += self.__vel
 
         
     

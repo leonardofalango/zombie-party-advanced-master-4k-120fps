@@ -1,4 +1,5 @@
 import pygame
+from bullet import Bullet
 
 class Player (pygame.sprite.Sprite):
     def __init__(self, resolution, skin) -> None:
@@ -37,15 +38,14 @@ class Player (pygame.sprite.Sprite):
         if direction == 'right':
             self.rect.x += self.__walk_distance
     
-    def shoot(self, x, y, enemies):
-        died = []
-        for enemy in enemies:
-            # print(enemy)
-            enemy.damage(self.__atk)
-            if not (enemy.is_alive()):
-                died.append(enemy)
-         
-        return died
+    def shoot(self, pos):
+        x = pos[0]
+        y = pos[1]
+        x0 = self.rect.x
+        y0 = self.rect.y
+
+        return Bullet(x0, y0, x, y)
+        
     
     def take_damage(self, value):
         value = value * (1-self.__armour)
