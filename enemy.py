@@ -37,7 +37,6 @@ class Enemy(pygame.sprite.Sprite):
                 self.rect.y > (self.__resolution[1] + self.rect.height)):
             self.alive = 0
             self.kill()
-            print('dead')
 
     def walk(self, player):
         destx = player.rect.x

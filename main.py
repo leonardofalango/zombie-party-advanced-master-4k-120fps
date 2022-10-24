@@ -1,6 +1,7 @@
 from player import Player
 from normal_zombie import Normal_zombie
 from flying_zombie import Flying_zombie
+from weapon import Weapon
 
 import pygame
 import sys
@@ -24,6 +25,11 @@ player.rect.y = player.posy
 
 all_enemies = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
+
+weapon = Weapon(resolution)
+weapons = pygame.sprite.Group()
+weapons.add(weapon)
+all_sprites.add(weapon)
 
 while 1:
     clock.tick(60)
@@ -58,7 +64,7 @@ while 1:
     for bala in bullets:
         bala.shoot()
     # print(len(all_sprites))
-    # dprint(len(all_sprites))
+    # print(len(all_sprites))
     while (len(all_enemies) < 15):
         num =   rd.randint(0,100)
         if num > 75:
@@ -84,5 +90,4 @@ while 1:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit(0)
-
 
