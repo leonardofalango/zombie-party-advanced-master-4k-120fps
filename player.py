@@ -23,6 +23,7 @@ class Player (pygame.sprite.Sprite):
         self.atk = 20
         self.__armour = 0
         self.hp = 1000
+        self.__alive = 1
         
     
     def walk(self, direction):
@@ -52,5 +53,6 @@ class Player (pygame.sprite.Sprite):
         self.hp -= value
         if self.hp <= 0:
             self.kill()
+            self.__alive = 0
 
 

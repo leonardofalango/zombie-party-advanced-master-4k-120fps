@@ -27,8 +27,6 @@ all_enemies = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 
 weapon = Weapon(resolution)
-weapons = pygame.sprite.Group()
-weapons.add(weapon)
 all_sprites.add(weapon)
 
 while 1:
@@ -50,6 +48,15 @@ while 1:
 
     if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
         player.walk('right')
+
+    if pygame.sprite.collide_mask(player, weapon):
+        weapon.kill()
+        player.atk += 20
+
+    collide = pygame.sprite.spritecollideany(player, all_enemies)
+    if collide:
+        player.take_damage(collide.atk)
+
 
     collide = pygame.sprite.groupcollide(all_enemies, bullets, False, True)
     if (collide):
