@@ -6,7 +6,4 @@ class Normal_zombie(Enemy):
         super().__init__(resolution, 100, 20, (width, height), 1)
         self.__walk_distance = max(resolution) / 50 * 0.1
 
-    def __str__(self):
-        return (
-            f'Nome: Normal Zombie\nHp: {self.__hp}\nEstá vivo: {self.alive}\nPos X: {self.rect.x}\nPos Y: {self.rect.y}')
 

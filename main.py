@@ -22,7 +22,7 @@ all_sprites.add(player)
 player.rect.x = player.posx
 player.rect.y = player.posy
 
-
+all_enemies = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 
 while 1:
@@ -45,9 +45,30 @@ while 1:
     if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
         player.walk('right')
 
+    collide = pygame.sprite.groupcollide(all_enemies, bullets, False, True)
+    if (collide):
+        for z in collide:
+            z.damage(player)
+
+    for e in all_enemies:
+        e.walk(player)
+        if (pygame.sprite.spritecollideany(e, bullets)):
+            e.damage(player)
 
     for bala in bullets:
         bala.shoot()
+    # print(len(all_sprites))
+    # dprint(len(all_sprites))
+    while (len(all_enemies) < 15):
+        num =   rd.randint(0,100)
+        if num > 75:
+            e = Flying_zombie(resolution)
+            all_sprites.add(e)
+            all_enemies.add(e)
+        else:
+            e = Normal_zombie(resolution)
+            all_sprites.add(e)
+            all_enemies.add(e)
 
 
     # Tomando dano:
@@ -56,9 +77,7 @@ while 1:
     pygame.display.update()
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.K_SPACE:
-            mousex, mousey = pygame.mouse.get_pos()
-            print(mousex, mousey)
-            bala = player.shoot((mousex,mousey))
+            bala = player.shoot(pygame.mouse.get_pos())
             all_sprites.add(bala)
             bullets.add(bala)
 

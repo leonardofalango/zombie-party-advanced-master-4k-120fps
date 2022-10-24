@@ -10,7 +10,7 @@ class Enemy(pygame.sprite.Sprite):
         self.__height = size[1]
         self.__resolution = resolution
         
-        self.__hp = hp
+        self.hp = hp
         self.atk = atk
 
         self.alive = 1
@@ -19,9 +19,9 @@ class Enemy(pygame.sprite.Sprite):
         self.image.fill((255, 0, 0))
 
         self.rect = self.image.get_rect()
-        
-        self.rect.x = 50
-        self.rect.y = 50
+
+        self.rect.x = rd.randint(0, resolution[0] - self.rect.width)
+        self.rect.y = rd.randint(0, resolution[1] - self.rect.height)
 
         self.__vel = vel
 
@@ -30,14 +30,14 @@ class Enemy(pygame.sprite.Sprite):
         # print(self.rect.x, self.rect.y)
     
     def is_alive(self):
-        if self.__hp <= 0 or self.rect.x < -10 or (
+        if self.hp <= 0 or (
+                self.rect.x < -10 or
                 self.rect.x > self.__resolution[0] + self.rect.width or
                 self.rect.y < -10 or
                 self.rect.y > (self.__resolution[1] + self.rect.height)):
-            
             self.alive = 0
             self.kill()
-            # print('dead')
+            print('dead')
 
     def walk(self, player):
         destx = player.rect.x
@@ -55,8 +55,9 @@ class Enemy(pygame.sprite.Sprite):
 
         
     
-    def damage(self, damage):
-        self.__hp -= damage
-        self.is_alive
+    def damage(self, player):
+        self.hp -= player.atk
+        print(self.hp)
+        self.is_alive()
 
 

@@ -20,9 +20,9 @@ class Player (pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         
         self.__cooldown = False
-        self.__atk = 20
+        self.atk = 20
         self.__armour = 0
-        self.__hp = 1000
+        self.hp = 1000
         
     
     def walk(self, direction):
@@ -49,8 +49,8 @@ class Player (pygame.sprite.Sprite):
     
     def take_damage(self, value):
         value = value * (1-self.__armour)
-        self.__hp -= value
-        if self.__hp <= 0:
+        self.hp -= value
+        if self.hp <= 0:
             self.kill()
     
 
