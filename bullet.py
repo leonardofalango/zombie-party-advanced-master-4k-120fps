@@ -3,6 +3,7 @@ class Bullet(pygame.sprite.Sprite):
     def __init__(self, playerx, playery, x, y):
         super(Bullet, self).__init__()
         self.__width, self.__height = 10,10
+
         self.image = pygame.Surface([self.__width, self.__height])
         self.image.fill((255, 255, 255))
 
