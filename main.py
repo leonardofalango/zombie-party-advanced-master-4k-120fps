@@ -22,10 +22,8 @@ all_sprites.add(player)
 player.rect.x = player.posx
 player.rect.y = player.posy
 
-enemy = Normal_zombie(resolution)
-all_enemies = pygame.sprite.Group()
-all_sprites.add(enemy)
-all_enemies.add(enemy)
+
+bullets = pygame.sprite.Group()
 
 while 1:
     clock.tick(60)
@@ -47,22 +45,22 @@ while 1:
     if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
         player.walk('right')
 
-    for i in all_enemies:
-        i.walk(player)
+
+    for bala in bullets:
+        bala.shoot()
 
 
     # Tomando dano:
-    damages = [s for s in all_enemies if s.rect.collidepoint((player.rect.x, player.rect.y))]
-    if len(damages) >= 1:
-        for i in all_enemies:
-            player.take_damage(i.atk)
 
     # Atirando / Dando dano
     pygame.display.update()
     for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
+        if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.K_SPACE:
             mousex, mousey = pygame.mouse.get_pos()
-            player.shoot((mousex,mousey))
+            print(mousex, mousey)
+            bala = player.shoot((mousex,mousey))
+            all_sprites.add(bala)
+            bullets.add(bala)
 
         if event.type == pygame.QUIT:
             pygame.quit()

@@ -42,9 +42,9 @@ class Player (pygame.sprite.Sprite):
         x = pos[0]
         y = pos[1]
         x0 = self.rect.x
-        x1 = self.rect.y
+        y0 = self.rect.y
 
-        bala = Bullet()
+        return Bullet(x0, y0, x, y)
         
     
     def take_damage(self, value):
