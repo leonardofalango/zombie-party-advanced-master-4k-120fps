@@ -7,7 +7,7 @@ import pygame
 import sys
 import random as rd
 
-width, heigth = 1200, 800
+width, heigth = 750, 500
 resolution = (width, heigth)
 pygame.init()
 
