@@ -1,5 +1,5 @@
 import pygame
-from weapons import glock
+from Player.weapon import ak47
 
 
 class Player (pygame.sprite.Sprite):
@@ -20,7 +20,7 @@ class Player (pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         
-        self.__weapon = glock.Glock(resolution, self)
+        self.weapon = ak47.Ak47(resolution, self)
         self.atk = 20
         self.__armour = 0
         self.hp = 1000
@@ -40,10 +40,10 @@ class Player (pygame.sprite.Sprite):
         if direction == 'right':
             self.rect.x += self.__walk_distance
         
-        self.__weapon.att(self)
+        self.weapon.att(self)
     
     def shoot(self, pos):
-        return self.__weapon.shoot(pos)
+        return self.weapon.shoot(pos)
         
     
     def take_damage(self, value):

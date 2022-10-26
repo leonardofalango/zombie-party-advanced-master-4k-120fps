@@ -4,7 +4,7 @@ import pygame
 
 # @abstractclass
 class Weapon(pygame.sprite.Sprite):
-    def __init__(self, resolution, player):
+    def __init__(self, resolution, player, firerate):
         super(Weapon, self).__init__()
 
         self.__width = 5
@@ -17,6 +17,9 @@ class Weapon(pygame.sprite.Sprite):
 
         self.rect.x = player.rect.x
         self.rect.y = player.rect.y
+
+        self.canfire = False;
+        self.firerate = firerate
 
     
     def att(self, player):
