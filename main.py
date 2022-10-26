@@ -23,8 +23,11 @@ player.rect.y = player.posy
 
 all_enemies = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
-
+timer = 0
+pygame.time.set_timer(pygame.USEREVENT, 10)
 while 1:
+    print(timer)
+
     clock.tick(60)
     player.update()
     surface.fill((0, 0, 0))
@@ -87,12 +90,20 @@ while 1:
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.K_SPACE:
             bala = player.shoot(pygame.mouse.get_pos())
-            if len(bala) >= 1:
+            try:
                 for i in bala:
                     all_sprites.add(i)
                     bullets.add(i)
+            except:
+                pass
 
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit(0)
 
+        if event.type == pygame.USEREVENT:
+            timer += 0.01
+
+    if (timer >= player.weapon.firerate):
+        timer = 0
+        player.weapon.canfire = True
