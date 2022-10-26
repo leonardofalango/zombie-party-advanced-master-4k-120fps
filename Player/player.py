@@ -1,5 +1,6 @@
 import pygame
-from bullet import Bullet
+from weapons import glock
+
 
 class Player (pygame.sprite.Sprite):
     def __init__(self, resolution, skin) -> None:
@@ -19,7 +20,7 @@ class Player (pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         
-        self.__cooldown = False
+        self.__weapon = glock.Glock(resolution, self)
         self.atk = 20
         self.__armour = 0
         self.hp = 1000
@@ -38,14 +39,11 @@ class Player (pygame.sprite.Sprite):
         
         if direction == 'right':
             self.rect.x += self.__walk_distance
+        
+        self.__weapon.att(self)
     
     def shoot(self, pos):
-        x = pos[0]
-        y = pos[1]
-        x0 = self.rect.x
-        y0 = self.rect.y
-
-        return Bullet(x0, y0, x, y)
+        return self.__weapon.shoot(pos)
         
     
     def take_damage(self, value):
