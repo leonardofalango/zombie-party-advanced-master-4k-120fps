@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 from player import Player
 from normal_zombie import Normal_zombie
 from flying_zombie import Flying_zombie
+=======
+from Player import player
+import Enemies
+>>>>>>> b619c998307e6594a358153112323909d8e65549
 
 import pygame
 import sys
@@ -13,7 +18,7 @@ pygame.init()
 pygame.display.set_caption('ZOMB.IO')
 
 surface = pygame.display.set_mode(resolution)
-player = Player(resolution, None)
+player = player.Player(resolution, None)
 
 clock = pygame.time.Clock()
 
@@ -23,10 +28,13 @@ player.rect.x = player.posx
 player.rect.y = player.posy
 
 all_enemies = pygame.sprite.Group()
-normal_zombie = Normal_zombie(resolution)
-all_sprites.add(normal_zombie)
-all_enemies.add(normal_zombie)
+bullets = pygame.sprite.Group()
+timer = 0
+pygame.time.set_timer(pygame.USEREVENT, 10)
+while 1:
+    print(timer)
 
+<<<<<<< HEAD
 flying_zombies = pygame.sprite.Group()
 for i in range(12):
     enemy = Flying_zombie(resolution)
@@ -35,6 +43,8 @@ for i in range(12):
     flying_zombies.add(enemy)
 
 while 1:
+=======
+>>>>>>> b619c998307e6594a358153112323909d8e65549
     clock.tick(60)
     player.update()
     surface.fill((0, 0, 0))
@@ -53,12 +63,46 @@ while 1:
 
     if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
         player.walk('right')
+<<<<<<< HEAD
+=======
 
-    for inimigo in flying_zombies:
-        inimigo.walk()
-        if inimigo.is_alive() == 0:
-            pass
+    # if pygame.sprite.collide_mask(player, weapon):
+    #     weapon.kill()
+    #     player.atk += 20
 
+    collide = pygame.sprite.spritecollideany(player, all_enemies)
+    if collide:
+        player.take_damage(collide.atk)
+
+
+    collide = pygame.sprite.groupcollide(all_enemies, bullets, False, True)
+    if (collide):
+        for z in collide:
+            z.damage(player)
+
+    for e in all_enemies:
+        e.walk(player)
+        if (pygame.sprite.spritecollideany(e, bullets)):
+            e.damage(player)
+
+    for bala in bullets:
+        bala.shoot()
+    
+>>>>>>> b619c998307e6594a358153112323909d8e65549
+
+    # while (len(all_enemies) < 15):
+    #     num =   rd.randint(0,100)
+    #     if num > 75:
+    #         e = Flying_zombie(resolution)
+    #         all_sprites.add(e)
+    #         all_enemies.add(e)
+    #     else:
+    #         e = Normal_zombie(resolution)
+    #         all_sprites.add(e)
+    #         all_enemies.add(e)
+
+
+<<<<<<< HEAD
     if len(all_enemies) < 40:
         # print('spawn')
         enemy = Flying_zombie(resolution)
@@ -71,18 +115,32 @@ while 1:
     if len(damages) >= 1:
         for i in all_enemies:
             player.take_damage(i.atk)
+=======
+    # Tomando dano:
+>>>>>>> b619c998307e6594a358153112323909d8e65549
 
     # Atirando / Dando dano
     pygame.display.update()
     for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
-            mousex, mousey = pygame.mouse.get_pos()
-            clicked_sprites = [s for s in all_enemies if s.rect.collidepoint((mousex, mousey))]
-            # print(clicked_sprites)
-            for died_enemy in player.shoot(mousex, mousey, clicked_sprites):
-                all_sprites.remove(died_enemy)
-                all_enemies.remove(died_enemy)
+        if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.K_SPACE:
+            bala = player.shoot(pygame.mouse.get_pos())
+            try:
+                for i in bala:
+                    all_sprites.add(i)
+                    bullets.add(i)
+            except:
+                pass
 
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit(0)
+<<<<<<< HEAD
+=======
+
+        if event.type == pygame.USEREVENT:
+            timer += 0.01
+
+    if (timer >= player.weapon.firerate):
+        timer = 0
+        player.weapon.canfire = True
+>>>>>>> b619c998307e6594a358153112323909d8e65549
