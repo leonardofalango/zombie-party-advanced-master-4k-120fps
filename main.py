@@ -12,7 +12,7 @@ pygame.init()
 pygame.display.set_caption('ZOMB.IO')
 
 surface = pygame.display.set_mode(resolution)
-player = player.Player(resolution, None)
+player = player.Player(resolution, 'Sprites/Player/Skin1 - ok/Idle/')
 
 clock = pygame.time.Clock()
 
@@ -32,6 +32,10 @@ while 1:
     player.update()
     surface.fill((0, 0, 0))
     all_sprites.draw(surface)
+
+
+    surface.blit(pygame.transform.scale(player.get_sprite(), (130, 200)), (player.rect.x, player.rect.y))
+
 
     pressed = pygame.key.get_pressed()
 
