@@ -26,8 +26,8 @@ bullets = pygame.sprite.Group()
 timer = 0
 pygame.time.set_timer(pygame.USEREVENT, 10)
 while 1:
-    print(timer)
-
+    mouse_pos = pygame.mouse.get_pos()
+    player.att_facing(mouse_pos)
     clock.tick(60)
     player.update()
     surface.fill((0, 0, 0))
@@ -88,7 +88,7 @@ while 1:
     pygame.display.update()
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.K_SPACE:
-            bala = player.shoot(pygame.mouse.get_pos())
+            bala = player.shoot(mouse_pos)
             try:
                 for i in bala:
                     all_sprites.add(i)

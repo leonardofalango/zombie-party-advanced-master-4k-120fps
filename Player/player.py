@@ -1,5 +1,6 @@
 import pygame
 from Player.weapon import ak47
+from math import atan2, pi
 
 
 class Player (pygame.sprite.Sprite):
@@ -54,7 +55,26 @@ class Player (pygame.sprite.Sprite):
             self.kill()
             self.__alive = 0
     
-    def att_facing(mouse_pos):
+    def att_facing(self, mouse_pos):
+        angle = atan2(mouse_pos[1] - self.rect.y, mouse_pos[0] - self.rect.x) * (180/pi)
+
+        if -45 < angle < 0:
+            self.facing = 'up-right'
+        elif -135 < angle <= -45:
+            self.facing = 'up-straight'
+        elif -180 < angle <= -135:
+            self.facing = 'up-left'
+
+
+        elif 135 < angle <= 180:
+            self.facing = 'down-left'
+        elif 45 < angle <= 135:
+            self.facing = 'down-straight'
+        elif 0 <= angle <= 45:
+            self.facing = 'down-right'
+
+        print(self.facing)
+
         
 
 
