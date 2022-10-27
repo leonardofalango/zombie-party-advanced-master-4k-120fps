@@ -25,6 +25,7 @@ class Player (pygame.sprite.Sprite):
         self.__armour = 0
         self.hp = 1000
         self.__alive = 1
+        self.facing = None
         
     
     def walk(self, direction):
@@ -52,5 +53,8 @@ class Player (pygame.sprite.Sprite):
         if self.hp <= 0:
             self.kill()
             self.__alive = 0
+    
+    def att_facing(mouse_pos):
+        
 
 

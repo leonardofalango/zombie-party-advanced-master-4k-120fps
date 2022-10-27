@@ -68,8 +68,7 @@ while 1:
 
     for bala in bullets:
         bala.shoot()
-    # print(len(all_sprites))
-    # print(len(all_sprites))
+    
 
     # while (len(all_enemies) < 15):
     #     num =   rd.randint(0,100)
