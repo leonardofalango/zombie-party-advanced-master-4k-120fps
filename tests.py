@@ -32,8 +32,10 @@ class Player (pygame.sprite.Sprite):
         self.facing = None
         self.ant = self.facing
         self.index = 0
-
-        self.iddle_images = self.create_images(self.skin)
+        
+        self.iddle_images = self.create_images(self.skin + 'Idle/')
+        self.walking_images = self.create_images(self.skin + 'Walking/')
+        
         
 
     def walk(self, direction):
@@ -80,7 +82,7 @@ class Player (pygame.sprite.Sprite):
         elif 0 <= angle <= 45:
             self.facing = 'down-right'
 
-        print(self.facing)
+        # print(self.facing)
 
     def get_sprite(self):
         if (self.facing == self.ant):
@@ -116,7 +118,7 @@ class Player (pygame.sprite.Sprite):
         out['down-right'] = aux
 
         aux = []
-        for x in sprites_down['down-right']:
+        for x in out['down-right']:
             aux.append(pygame.transform.flip(x, True, False))
         out['down-left'] = aux
         
@@ -140,7 +142,7 @@ class Player (pygame.sprite.Sprite):
         out['up-right'] = aux
 
         aux = []
-        for x in sprites_down['up-right']:
+        for x in out['up-right']:
             aux.append(pygame.transform.flip(x, True, False))
         out['up-left'] = aux
         
