@@ -35,17 +35,3 @@ if __name__ == '__main__':
 
     start_playlist(playList)
 
-
-'''
-pygame.init()
-pygame.mixer.music.load('Songs/LMFAO 8-Bit.mp3')
-pygame.mixer.music.load('Songs/Blinding Lights - 8 Bit.mp3')
-pygame.mixer.music.load('Songs/Matuê - 777-666 - 8 Bit.mp3')
-pygame.mixer.music.load('Songs/Turn Down For What - 8 Bit.mp3')
-pygame.mixer.music.load('Songs/LMFAO 8-Bit.mp3', "LMFAO")
-pygame.mixer.music.queue('Songs/Blinding Lights - 8 Bit.mp3', "THE WEEKEND", 0)
-pygame.mixer.music.queue('Songs/Matuê - 777-666 - 8 Bit.mp3', "MATUÊ", 0)
-pygame.mixer.music.queue('Songs/Turn Down For What - 8 Bit.mp3', "TURN DOWN FOR WHAT", 0)
-pygame.mixer.music.play(-1)
-pygame.event.wait()
-'''

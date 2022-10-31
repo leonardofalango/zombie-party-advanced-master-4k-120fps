@@ -4,29 +4,32 @@ from math import atan2, pi
 from os import listdir
 
 
-class Player (pygame.sprite.Sprite):
+class Player(pygame.sprite.Sprite):
     def __init__(self, resolution, skin) -> None:
         super().__init__()
 
         self.skin = skin
         self.skip_frames = 6
-    
-        self.__width = (resolution[0]/20 * 0.75) - 30
-        self.__height = resolution[1]/20 * 0.75
+
+        self.__width = (resolution[0] / 20 * 0.75) - 30
+        self.__height = resolution[1] / 20 * 0.75
         self.__walk_distance = max(resolution) / 50 * 0.3
 
-        self.posx = resolution[0]/2 - self.__width
-        self.posy = resolution[1]/2 - self.__height
-        
+        self.posx = resolution[0] / 2 - self.__width
+        self.posy = resolution[1] / 2 - self.__height
+
         self.image = pygame.Surface([self.__width, self.__height])
         self.image.fill((0, 255, 0))
 
         self.rect = self.image.get_rect()
-        
+
         self.weapon = glock.Glock(resolution, self)
         self.atk = 20
         self.__armour = 0
-        self.__hp = 10
+        self.hp = 1000
+        self.__alive = 1
+
+        self.facing = None
         self.animation = 'walk'
         self.ant = self.facing
         self.antanimation = self.animation
@@ -36,40 +39,37 @@ class Player (pygame.sprite.Sprite):
         self.walking_images = self.create_images(self.skin + 'Walking/', self.skip_frames)
         self.sprite = self.iddle_images['up-right'][0]
 
-        
-
     def walk(self, direction):
         if direction == 'up':
             self.rect.y -= self.__walk_distance
-        
+
         if direction == 'down':
             self.rect.y += self.__walk_distance
 
         if direction == 'left':
             self.rect.x -= self.__walk_distance
-        
+
         if direction == 'right':
             self.rect.x += self.__walk_distance
 
         self.animation = 'walk'
         self.weapon.att(self)
         # self.sprite = self.get_sprite(self.walking_images)
-    
+
     def shoot(self, pos):
         self.animation = 'shoot'
         return self.weapon.shoot(pos)
-        
-    
+
     def take_damage(self, value):
-        value = value * (1-self.__armour)
+        value = value * (1 - self.__armour)
         self.hp -= value
         if self.hp <= 0:
             self.kill()
             self.__alive = 0
-    
+
     def att_facing(self, mouse_pos):
         self.animation = 'iddle'
-        angle = atan2(mouse_pos[1] - self.rect.y, mouse_pos[0] - self.rect.x) * (180/pi)
+        angle = atan2(mouse_pos[1] - self.rect.y, mouse_pos[0] - self.rect.x) * (180 / pi)
 
         if -45 < angle < 0:
             self.facing = 'up-right'
@@ -88,12 +88,12 @@ class Player (pygame.sprite.Sprite):
 
         # print(self.facing)
 
-
     def att_sprite(self):
         if self.animation == 'walk':
             self.sprite = self.get_sprite(self.walking_images)
         else:
             self.sprite = self.get_sprite(self.iddle_images)
+
     def get_sprite(self, dic):
         if (self.facing == self.ant and self.animation == self.antanimation):
             self.index += 1
@@ -107,15 +107,12 @@ class Player (pygame.sprite.Sprite):
 
         return dic[self.facing][self.index]
 
-
-
-
     def create_images(self, sprites_path, frame_skip):
         out = {}
         path = sprites_path + 'Front/'
         sprite45, sprite = listdir(path)
         sprites_down = {'down': [x for x in listdir(path + sprite)],
-                                  'down45': [x for x in listdir(path + sprite45)]}
+                        'down45': [x for x in listdir(path + sprite45)]}
         aux = []
         for x in sprites_down['down']:
             for j in range(frame_skip):
@@ -135,11 +132,11 @@ class Player (pygame.sprite.Sprite):
         for x in out['down-right']:
             aux.append(pygame.transform.flip(x, True, False))
         out['down-left'] = aux
-        
+
         path = sprites_path + "Down/"
         sprite_back45, sprite_back = listdir(path)
         sprites_down = {'back': [x for x in listdir(path + sprite_back)],
-                                  'back45': [x for x in listdir(path + sprite_back45)]}
+                        'back45': [x for x in listdir(path + sprite_back45)]}
 
         aux = []
         for x in sprites_down['back']:
@@ -159,7 +156,7 @@ class Player (pygame.sprite.Sprite):
         for x in out['up-right']:
             aux.append(pygame.transform.flip(x, True, False))
         out['up-left'] = aux
-        
+
         return out
 
 

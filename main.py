@@ -26,16 +26,14 @@ bullets = pygame.sprite.Group()
 timer = 0
 pygame.time.set_timer(pygame.USEREVENT, 10)
 while 1:
-    print(timer)
-
+    mouse_pos = pygame.mouse.get_pos()
+    player.att_facing(mouse_pos)
     clock.tick(60)
     player.update()
     surface.fill((0, 0, 0))
     all_sprites.draw(surface)
 
-
     surface.blit(pygame.transform.scale(player.sprite, (130, 200)), (player.rect.x, player.rect.y))
-
 
     pressed = pygame.key.get_pressed()
 
@@ -50,7 +48,7 @@ while 1:
 
     if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
         player.walk('right')
-
+    player.att_sprite()
     # if pygame.sprite.collide_mask(player, weapon):
     #     weapon.kill()
     #     player.atk += 20
@@ -58,7 +56,6 @@ while 1:
     collide = pygame.sprite.spritecollideany(player, all_enemies)
     if collide:
         player.take_damage(collide.atk)
-
 
     collide = pygame.sprite.groupcollide(all_enemies, bullets, False, True)
     if (collide):
@@ -72,8 +69,6 @@ while 1:
 
     for bala in bullets:
         bala.shoot()
-    
->>>>>>> 
 
     # while (len(all_enemies) < 15):
     #     num =   rd.randint(0,100)
@@ -85,7 +80,6 @@ while 1:
     #         e = Normal_zombie(resolution)
     #         all_sprites.add(e)
     #         all_enemies.add(e)
-
 
     # Tomando dano:
 
