@@ -1,11 +1,5 @@
-<<<<<<< HEAD
-from player import Player
-from normal_zombie import Normal_zombie
-from flying_zombie import Flying_zombie
-=======
 from Player import player
 import Enemies
->>>>>>> b619c998307e6594a358153112323909d8e65549
 
 import pygame
 import sys
@@ -18,7 +12,7 @@ pygame.init()
 pygame.display.set_caption('ZOMB.IO')
 
 surface = pygame.display.set_mode(resolution)
-player = player.Player(resolution, None)
+player = player.Player(resolution, 'Sprites/Player/Skin1 - ok/')
 
 clock = pygame.time.Clock()
 
@@ -34,21 +28,14 @@ pygame.time.set_timer(pygame.USEREVENT, 10)
 while 1:
     print(timer)
 
-<<<<<<< HEAD
-flying_zombies = pygame.sprite.Group()
-for i in range(12):
-    enemy = Flying_zombie(resolution)
-    all_sprites.add(enemy)
-    all_enemies.add(enemy)
-    flying_zombies.add(enemy)
-
-while 1:
-=======
->>>>>>> b619c998307e6594a358153112323909d8e65549
     clock.tick(60)
     player.update()
     surface.fill((0, 0, 0))
     all_sprites.draw(surface)
+
+
+    surface.blit(pygame.transform.scale(player.sprite, (130, 200)), (player.rect.x, player.rect.y))
+
 
     pressed = pygame.key.get_pressed()
 
@@ -63,8 +50,6 @@ while 1:
 
     if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
         player.walk('right')
-<<<<<<< HEAD
-=======
 
     # if pygame.sprite.collide_mask(player, weapon):
     #     weapon.kill()
@@ -88,7 +73,7 @@ while 1:
     for bala in bullets:
         bala.shoot()
     
->>>>>>> b619c998307e6594a358153112323909d8e65549
+>>>>>>> 
 
     # while (len(all_enemies) < 15):
     #     num =   rd.randint(0,100)
@@ -102,28 +87,13 @@ while 1:
     #         all_enemies.add(e)
 
 
-<<<<<<< HEAD
-    if len(all_enemies) < 40:
-        # print('spawn')
-        enemy = Flying_zombie(resolution)
-        all_sprites.add(enemy)
-        all_enemies.add(enemy)
-        flying_zombies.add(enemy)
-
     # Tomando dano:
-    damages = [s for s in all_enemies if s.rect.collidepoint((player.rect.x, player.rect.y))]
-    if len(damages) >= 1:
-        for i in all_enemies:
-            player.take_damage(i.atk)
-=======
-    # Tomando dano:
->>>>>>> b619c998307e6594a358153112323909d8e65549
 
     # Atirando / Dando dano
     pygame.display.update()
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.K_SPACE:
-            bala = player.shoot(pygame.mouse.get_pos())
+            bala = player.shoot(mouse_pos)
             try:
                 for i in bala:
                     all_sprites.add(i)
@@ -134,8 +104,6 @@ while 1:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit(0)
-<<<<<<< HEAD
-=======
 
         if event.type == pygame.USEREVENT:
             timer += 0.01
@@ -143,4 +111,3 @@ while 1:
     if (timer >= player.weapon.firerate):
         timer = 0
         player.weapon.canfire = True
->>>>>>> b619c998307e6594a358153112323909d8e65549

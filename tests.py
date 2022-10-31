@@ -1,5 +1,5 @@
 import pygame
-from Player.weapon import glock
+from Player.weapon import shotgun
 from math import atan2, pi
 from os import listdir
 
@@ -23,19 +23,19 @@ class Player (pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         
-        self.weapon = glock.Glock(resolution, self)
+        self.weapon = shotgun.Shotgun(resolution, self)
         self.atk = 20
         self.__armour = 0
-        self.__hp = 10
-        self.animation = 'walk'
+        self.hp = 1000
+        self.__alive = 1
+
+        self.facing = None
         self.ant = self.facing
-        self.antanimation = self.animation
         self.index = 0
-
-        self.iddle_images = self.create_images(self.skin + 'Idle/', self.skip_frames)
-        self.walking_images = self.create_images(self.skin + 'Walking/', self.skip_frames)
-        self.sprite = self.iddle_images['up-right'][0]
-
+        
+        self.iddle_images = self.create_images(self.skin + 'Idle/')
+        self.walking_images = self.create_images(self.skin + 'Walking/')
+        
         
 
     def walk(self, direction):
@@ -50,13 +50,10 @@ class Player (pygame.sprite.Sprite):
         
         if direction == 'right':
             self.rect.x += self.__walk_distance
-
-        self.animation = 'walk'
+        
         self.weapon.att(self)
-        # self.sprite = self.get_sprite(self.walking_images)
     
     def shoot(self, pos):
-        self.animation = 'shoot'
         return self.weapon.shoot(pos)
         
     
@@ -68,7 +65,6 @@ class Player (pygame.sprite.Sprite):
             self.__alive = 0
     
     def att_facing(self, mouse_pos):
-        self.animation = 'iddle'
         angle = atan2(mouse_pos[1] - self.rect.y, mouse_pos[0] - self.rect.x) * (180/pi)
 
         if -45 < angle < 0:
@@ -88,29 +84,19 @@ class Player (pygame.sprite.Sprite):
 
         # print(self.facing)
 
-
-    def att_sprite(self):
-        if self.animation == 'walk':
-            self.sprite = self.get_sprite(self.walking_images)
-        else:
-            self.sprite = self.get_sprite(self.iddle_images)
-    def get_sprite(self, dic):
-        if (self.facing == self.ant and self.animation == self.antanimation):
+    def get_sprite(self):
+        if (self.facing == self.ant):
             self.index += 1
         else:
             self.index = 0
             self.ant = self.facing
-            self.antanimation = self.animation
-
-        if self.index >= len(dic[self.facing]):
+        if self.index >= len(self.iddle_images[self.facing]):
             self.index = 0
-
-        return dic[self.facing][self.index]
-
+        return self.iddle_images[self.facing][self.index]
 
 
 
-    def create_images(self, sprites_path, frame_skip):
+    def create_images(self, sprites_path):
         out = {}
         path = sprites_path + 'Front/'
         sprite45, sprite = listdir(path)
@@ -118,7 +104,7 @@ class Player (pygame.sprite.Sprite):
                                   'down45': [x for x in listdir(path + sprite45)]}
         aux = []
         for x in sprites_down['down']:
-            for j in range(frame_skip):
+            for j in range(self.skip_frames):
                 aux.append(pygame.image.load(path + sprite + "/" + x))
 
         out['down-straight'] = aux
@@ -126,7 +112,7 @@ class Player (pygame.sprite.Sprite):
         aux = []
 
         for x in sprites_down['down45']:
-            for j in range(frame_skip):
+            for j in range(self.skip_frames):
                 aux.append(pygame.image.load(path + sprite45 + "/" + x))
 
         out['down-right'] = aux
@@ -143,14 +129,14 @@ class Player (pygame.sprite.Sprite):
 
         aux = []
         for x in sprites_down['back']:
-            for j in range(frame_skip):
+            for j in range(self.skip_frames):
                 aux.append(pygame.image.load(path + sprite_back + "/" + x))
 
         out['up-straight'] = aux
 
         aux = []
         for x in sprites_down['back45']:
-            for j in range(frame_skip):
+            for j in range(self.skip_frames):
                 aux.append(pygame.image.load(path + sprite_back45 + "/" + x))
 
         out['up-right'] = aux
