@@ -12,7 +12,7 @@ pygame.init()
 pygame.display.set_caption('ZOMB.IO')
 
 surface = pygame.display.set_mode(resolution)
-player = player.Player(resolution, 'Sprites/Player/Skin1 - ok/Idle/')
+player = player.Player(resolution, 'Sprites/Player/Skin1 - ok/')
 
 clock = pygame.time.Clock()
 
@@ -34,7 +34,7 @@ while 1:
     all_sprites.draw(surface)
 
 
-    surface.blit(pygame.transform.scale(player.get_sprite(), (130, 200)), (player.rect.x, player.rect.y))
+    surface.blit(pygame.transform.scale(player.sprite, (130, 200)), (player.rect.x, player.rect.y))
 
 
     pressed = pygame.key.get_pressed()
@@ -50,7 +50,7 @@ while 1:
 
     if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
         player.walk('right')
-
+    player.att_sprite()
     # if pygame.sprite.collide_mask(player, weapon):
     #     weapon.kill()
     #     player.atk += 20

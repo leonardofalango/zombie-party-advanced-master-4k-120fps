@@ -1,5 +1,5 @@
 import pygame
-from Player.weapon import shotgun
+from Player.weapon import glock
 from math import atan2, pi
 from os import listdir
 
@@ -23,21 +23,23 @@ class Player (pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         
-        self.weapon = shotgun.Shotgun(resolution, self)
+        self.weapon = glock.Glock(resolution, self)
         self.atk = 20
         self.__armour = 0
         self.hp = 1000
         self.__alive = 1
 
         self.facing = None
+        self.animation = 'walk'
         self.ant = self.facing
+        self.antanimation = self.animation
         self.index = 0
 
-        self.iddle_images = {}
+        self.iddle_images = self.create_images(self.skin + 'Idle/', self.skip_frames)
+        self.walking_images = self.create_images(self.skin + 'Walking/', self.skip_frames)
+        self.sprite = self.iddle_images['up-right'][0]
 
-
-        self.create_images()
-
+        
 
     def walk(self, direction):
         if direction == 'up':
@@ -51,10 +53,13 @@ class Player (pygame.sprite.Sprite):
         
         if direction == 'right':
             self.rect.x += self.__walk_distance
-        
+
+        self.animation = 'walk'
         self.weapon.att(self)
+        # self.sprite = self.get_sprite(self.walking_images)
     
     def shoot(self, pos):
+        self.animation = 'shoot'
         return self.weapon.shoot(pos)
         
     
@@ -66,6 +71,7 @@ class Player (pygame.sprite.Sprite):
             self.__alive = 0
     
     def att_facing(self, mouse_pos):
+        self.animation = 'iddle'
         angle = atan2(mouse_pos[1] - self.rect.y, mouse_pos[0] - self.rect.x) * (180/pi)
 
         if -45 < angle < 0:
@@ -83,66 +89,80 @@ class Player (pygame.sprite.Sprite):
         elif 0 <= angle <= 45:
             self.facing = 'down-right'
 
-        print(self.facing)
+        # print(self.facing)
 
-    def get_sprite(self):
-        if (self.facing == self.ant):
+
+    def att_sprite(self):
+        if self.animation == 'walk':
+            self.sprite = self.get_sprite(self.walking_images)
+        else:
+            self.sprite = self.get_sprite(self.iddle_images)
+    def get_sprite(self, dic):
+        if (self.facing == self.ant and self.animation == self.antanimation):
             self.index += 1
         else:
             self.index = 0
             self.ant = self.facing
-        if self.index >= len(self.iddle_images[self.facing]):
+            self.antanimation = self.animation
+
+        if self.index >= len(dic[self.facing]):
             self.index = 0
-        return self.iddle_images[self.facing][self.index]
+
+        return dic[self.facing][self.index]
 
 
 
-    def create_images(self):
-        self.iddle45, self.iddle = listdir(self.skin + 'Front/')
-        self.iddle_images_down = {'down': [x for x in listdir(self.skin + 'Front/' + self.iddle)],
-                                  'down45': [x for x in listdir(self.skin + 'Front/' + self.iddle45)]}
+
+    def create_images(self, sprites_path, frame_skip):
+        out = {}
+        path = sprites_path + 'Front/'
+        sprite45, sprite = listdir(path)
+        sprites_down = {'down': [x for x in listdir(path + sprite)],
+                                  'down45': [x for x in listdir(path + sprite45)]}
         aux = []
-        for x in self.iddle_images_down['down']:
-            for j in range(self.skip_frames):
-                aux.append(pygame.image.load(self.skin + 'Front/' + self.iddle + "/" + x))
+        for x in sprites_down['down']:
+            for j in range(frame_skip):
+                aux.append(pygame.image.load(path + sprite + "/" + x))
 
-        self.iddle_images['down-straight'] = aux
-
-        aux = []
-
-        for x in self.iddle_images_down['down45']:
-            for j in range(self.skip_frames):
-                aux.append(pygame.image.load(self.skin + 'Front/' + self.iddle45 + "/" + x))
-
-        self.iddle_images['down-right'] = aux
+        out['down-straight'] = aux
 
         aux = []
-        for x in self.iddle_images['down-right']:
+
+        for x in sprites_down['down45']:
+            for j in range(frame_skip):
+                aux.append(pygame.image.load(path + sprite45 + "/" + x))
+
+        out['down-right'] = aux
+
+        aux = []
+        for x in out['down-right']:
             aux.append(pygame.transform.flip(x, True, False))
-        self.iddle_images['down-left'] = aux
-
-        self.backiddle45, self.backiddle = listdir(self.skin + 'Down/')
-        self.iddle_images_back = {'back': [x for x in listdir(self.skin + 'Down/' + self.backiddle)],
-                                  'back45': [x for x in listdir(self.skin + 'Down/' + self.backiddle45)]}
-
-        aux = []
-        for x in self.iddle_images_back['back']:
-            for j in range(self.skip_frames):
-                aux.append(pygame.image.load(self.skin + 'Down/' + self.backiddle + "/" + x))
-
-        self.iddle_images['up-straight'] = aux
+        out['down-left'] = aux
+        
+        path = sprites_path + "Down/"
+        sprite_back45, sprite_back = listdir(path)
+        sprites_down = {'back': [x for x in listdir(path + sprite_back)],
+                                  'back45': [x for x in listdir(path + sprite_back45)]}
 
         aux = []
-        for x in self.iddle_images_back['back45']:
-            for j in range(self.skip_frames):
-                aux.append(pygame.image.load(self.skin + 'Down/' + self.backiddle45 + "/" + x))
+        for x in sprites_down['back']:
+            for j in range(frame_skip):
+                aux.append(pygame.image.load(path + sprite_back + "/" + x))
 
-        self.iddle_images['up-right'] = aux
+        out['up-straight'] = aux
 
         aux = []
-        for x in self.iddle_images['up-right']:
+        for x in sprites_down['back45']:
+            for j in range(frame_skip):
+                aux.append(pygame.image.load(path + sprite_back45 + "/" + x))
+
+        out['up-right'] = aux
+
+        aux = []
+        for x in out['up-right']:
             aux.append(pygame.transform.flip(x, True, False))
-        self.iddle_images['up-left'] = aux
-
+        out['up-left'] = aux
+        
+        return out
 
 
