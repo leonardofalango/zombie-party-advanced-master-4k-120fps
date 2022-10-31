@@ -4,6 +4,7 @@ from flying_zombie import Flying_zombie
 from weapon import Weapon
 
 import Menu
+import Shop
 
 import pygame
 import sys
