@@ -4,7 +4,7 @@ from flying_zombie import Flying_zombie
 from weapon import Weapon
 
 import Menu
-import Shop
+
 
 import pygame
 import sys
@@ -100,6 +100,7 @@ def mainGame():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit(0)
+
 
 pygame.init()
 screen = pygame.display.set_mode((750, 500))
