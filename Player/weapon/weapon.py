@@ -52,8 +52,10 @@ class Weapon(pygame.sprite.Sprite):
         if (self.index >= len(self.sprites[0])):
             self.index = 0
 
-        self.sprite = pygame.transform.rotate(sprites[self.index], self.angle)
-
+        self.sprite = pygame.transform.scale(sprites[self.index], (210, 70))
+        rotated_image = pygame.transform.rotate(self.sprite, self.angle)
+        new_rect = rotated_image.get_rect(center=self.sprite.get_rect(center=(self.rect.x, self.rect.y)).center)
+        self.blit = [rotated_image, new_rect]
 
 
 

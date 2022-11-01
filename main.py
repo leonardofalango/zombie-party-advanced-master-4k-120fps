@@ -35,9 +35,12 @@ while 1:
     surface.fill((0, 0, 0))
     all_sprites.draw(surface)
 
-
-    surface.blit(pygame.transform.scale(player.sprite, (120, 150)), (player.rect.x, player.rect.y))
-    surface.blit(pygame.transform.scale(player.weapon.sprite, (120, 50)), (player.weapon.rect.x, player.weapon.rect.y))
+    if 'down' in player.facing:
+        surface.blit(pygame.transform.scale(player.sprite, (120, 150)), (player.rect.x, player.rect.y))
+        surface.blit(player.weapon.blit[0], player.weapon.blit[1])
+    else:
+        surface.blit(player.weapon.blit[0], player.weapon.blit[1])
+        surface.blit(pygame.transform.scale(player.sprite, (120, 150)), (player.rect.x, player.rect.y))
 
 
     pressed = pygame.key.get_pressed()
