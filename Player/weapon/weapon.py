@@ -5,11 +5,11 @@ from os import listdir
 
 # @abstractclass
 class Weapon(pygame.sprite.Sprite):
-    def __init__(self, resolution, player, firerate):
+    def __init__(self, resolution, player, firerate, width, height):
         super(Weapon, self).__init__()
 
-        self.__width = 120
-        self.__height = 50
+        self.__width = width
+        self.__height = height
 
         self.image = pygame.Surface([self.__width, self.__height])
 
@@ -52,7 +52,7 @@ class Weapon(pygame.sprite.Sprite):
         if (self.index >= len(self.sprites[0])):
             self.index = 0
 
-        self.sprite = pygame.transform.scale(sprites[self.index], (210, 70))
+        self.sprite = pygame.transform.scale(sprites[self.index], (self.__width, self.__height))
         rotated_image = pygame.transform.rotate(self.sprite, self.angle)
         new_rect = rotated_image.get_rect(center=self.sprite.get_rect(center=(self.rect.x, self.rect.y)).center)
         self.blit = [rotated_image, new_rect]

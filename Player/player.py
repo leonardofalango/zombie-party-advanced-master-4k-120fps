@@ -1,5 +1,5 @@
 import pygame
-from Player.weapon import glock
+from Player.weapon import glock, shotgun
 from math import atan2, pi
 from os import listdir
 
@@ -23,7 +23,7 @@ class Player (pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         
-        self.weapon = glock.Glock(resolution, self)
+        self.weapon = shotgun.Shotgun(resolution, self)
         self.atk = 20
         self.__armour = 0
         self.hp = 1000
