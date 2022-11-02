@@ -1,5 +1,5 @@
 import pygame
-from Player.weapon import glock
+from Player.weapon import glock, shotgun
 from math import atan2, pi
 from os import listdir
 
@@ -19,21 +19,22 @@ class Player(pygame.sprite.Sprite):
         self.posy = resolution[1] / 2 - self.__height
 
         self.image = pygame.Surface([self.__width, self.__height])
-        self.image.fill((0, 255, 0))
+        # self.image.fill((0, 255, 0))
 
         self.rect = self.image.get_rect()
-
-        self.weapon = glock.Glock(resolution, self)
+        
+        self.weapon = shotgun.Shotgun(resolution, self)
         self.atk = 20
         self.__armour = 0
         self.hp = 1000
         self.__alive = 1
 
-        self.facing = None
+        self.facing = 'down'
         self.animation = 'walk'
         self.ant = self.facing
         self.antanimation = self.animation
         self.index = 0
+        self.angle = 0
 
         self.iddle_images = self.create_images(self.skin + 'Idle/', self.skip_frames)
         self.walking_images = self.create_images(self.skin + 'Walking/', self.skip_frames)
@@ -53,7 +54,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.x += self.__walk_distance
 
         self.animation = 'walk'
-        self.weapon.att(self)
+
         # self.sprite = self.get_sprite(self.walking_images)
 
     def shoot(self, pos):
@@ -69,23 +70,24 @@ class Player(pygame.sprite.Sprite):
 
     def att_facing(self, mouse_pos):
         self.animation = 'iddle'
-        angle = atan2(mouse_pos[1] - self.rect.y, mouse_pos[0] - self.rect.x) * (180 / pi)
+        self.angle = atan2(mouse_pos[1] - self.rect.y, mouse_pos[0] - self.rect.x) * (180/pi)
 
-        if -45 < angle < 0:
+        if -45 < self.angle < 0:
             self.facing = 'up-right'
-        elif -135 < angle <= -45:
+        elif -135 < self.angle <= -45:
             self.facing = 'up-straight'
-        elif -180 < angle <= -135:
+        elif -180 < self.angle <= -135:
             self.facing = 'up-left'
 
 
-        elif 135 < angle <= 180:
+        elif 135 < self.angle <= 180:
             self.facing = 'down-left'
-        elif 45 < angle <= 135:
+        elif 45 < self.angle <= 135:
             self.facing = 'down-straight'
-        elif 0 <= angle <= 45:
+        elif 0 <= self.angle <= 45:
             self.facing = 'down-right'
 
+        self.weapon.att(self)
         # print(self.facing)
 
     def att_sprite(self):

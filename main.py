@@ -25,6 +25,8 @@ all_enemies = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 timer = 0
 pygame.time.set_timer(pygame.USEREVENT, 10)
+
+all_sprites.add(player.weapon)
 while 1:
     mouse_pos = pygame.mouse.get_pos()
     player.att_facing(mouse_pos)
@@ -33,7 +35,12 @@ while 1:
     surface.fill((0, 0, 0))
     all_sprites.draw(surface)
 
-    surface.blit(pygame.transform.scale(player.sprite, (130, 200)), (player.rect.x, player.rect.y))
+    if 'down' in player.facing:
+        surface.blit(pygame.transform.scale(player.sprite, (120, 150)), (player.rect.x, player.rect.y))
+        surface.blit(player.weapon.blit[0], player.weapon.blit[1])
+    else:
+        surface.blit(player.weapon.blit[0], player.weapon.blit[1])
+        surface.blit(pygame.transform.scale(player.sprite, (120, 150)), (player.rect.x, player.rect.y))
 
     pressed = pygame.key.get_pressed()
 
