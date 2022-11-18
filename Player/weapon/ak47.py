@@ -4,7 +4,8 @@ from . import bullet, weapon
 
 class Ak47(weapon.Weapon):
     def __init__(self, resolution, player):
-        super().__init__(resolution, player, 0.05)
+        super().__init__(resolution, player, 0.05, 210, 180)
+        super().create_sprites("E:/leonardo-falango/Sprites/Weapons/AK-47", 3)
 
     def shoot(self, pos):
         if (self.canfire):

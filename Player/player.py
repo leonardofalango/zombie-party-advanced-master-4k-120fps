@@ -1,5 +1,5 @@
 import pygame
-from Player.weapon import glock, shotgun
+from Player.weapon import glock, shotgun, ak47
 from math import atan2, pi
 from os import listdir
 
@@ -11,8 +11,8 @@ class Player (pygame.sprite.Sprite):
         self.skin = skin
         self.skip_frames = 6
     
-        self.__width = (resolution[0]/20 * 0.75) - 30
-        self.__height = resolution[1]/20 * 0.75
+        self.__width = 120
+        self.__height = 150
         self.__walk_distance = max(resolution) / 50 * 0.3
 
         self.posx = resolution[0]/2 - self.__width
@@ -23,8 +23,8 @@ class Player (pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         
-        self.weapon = shotgun.Shotgun(resolution, self)
-        self.atk = 20
+        self.weapon = ak47.Ak47(resolution, self)
+        self.atk = 5
         self.__armour = 0
         self.hp = 1000
         self.__alive = 1

@@ -1,5 +1,6 @@
+from Enemies.flying_zombie import Flying_zombie
+from Enemies.normal_zombie import Normal_zombie
 from Player import player
-import Enemies
 
 import pygame
 import sys
@@ -34,6 +35,7 @@ while 1:
     player.update()
     surface.fill((0, 0, 0))
     all_sprites.draw(surface)
+
 
     if 'down' in player.facing:
         surface.blit(pygame.transform.scale(player.sprite, (120, 150)), (player.rect.x, player.rect.y))
@@ -73,6 +75,7 @@ while 1:
 
     for e in all_enemies:
         e.walk(player)
+        surface.blit(pygame.transform.scale(e.att(), (e.width, e.height)), (e.rect.x, e.rect.y))
         if (pygame.sprite.spritecollideany(e, bullets)):
             e.damage(player)
 
@@ -80,16 +83,13 @@ while 1:
         bala.shoot()
     
 
-    # while (len(all_enemies) < 15):
-    #     num =   rd.randint(0,100)
-    #     if num > 75:
-    #         e = Flying_zombie(resolution)
-    #         all_sprites.add(e)
-    #         all_enemies.add(e)
-    #     else:
-    #         e = Normal_zombie(resolution)
-    #         all_sprites.add(e)
-    #         all_enemies.add(e)
+    while (len(all_enemies) < 4):
+        e = Flying_zombie(resolution)
+        all_sprites.add(e)
+        all_enemies.add(e)
+        e = Normal_zombie(resolution)
+        all_sprites.add(e)
+        all_enemies.add(e)
 
 
     # Tomando dano:
