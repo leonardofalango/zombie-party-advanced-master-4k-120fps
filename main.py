@@ -3,11 +3,30 @@ from Enemies.normal_zombie import Normal_zombie
 from Player import player
 
 import Menu
-
-
 import pygame
 import sys
 import random as rd
+
+def get_enemy_cap(t):
+    return 4 + (t / 100)
+
+def between(value, min, max):
+    return value >= min or value < max
+
+def create_enemy(index, resolution):
+    if index == 0:
+        return Normal_zombie(resolution)
+    if index == 1:
+        return Flying_zombie(resolution)
+
+def spawn(values):
+    if sum(values) != 100:
+        raise Exception()
+    
+    for i in range(len(values)):
+        v = rd.randint(0,101)
+        if between(v, 0 if i == 0 else values[i-1], values[i]):
+            return create_enemy(i, resolution)
 
 width, heigth = 1200, 800
 resolution = (width, heigth)
@@ -82,16 +101,10 @@ def mainGame():
             bala.shoot()
         # print(len(all_sprites))
         # print(len(all_sprites))
-        while (len(all_enemies) < 15):
-            num =   rd.randint(0,100)
-            if num > 75:
-                e = Flying_zombie(resolution)
-                all_sprites.add(e)
-                all_enemies.add(e)
-            else:
-                e = Normal_zombie(resolution)
-                all_sprites.add(e)
-                all_enemies.add(e)
+        while (len(all_enemies) < get_enemy_cap(tempo_total)):
+            e = spawn([50, 50])
+            all_enemies.add(e)
+            all_sprites.add(e)
 
 
         # Tomando dano:
@@ -196,13 +209,12 @@ while 1:
         bala.shoot()
     
 
-    while (len(all_enemies) < 4 + (tempo_total / 100)):
-        e = Flying_zombie(resolution)
-        all_sprites.add(e)
+    while (len(all_enemies) < get_enemy_cap(tempo_total)):
+        e = spawn([50, 50])
         all_enemies.add(e)
-        e = Normal_zombie(resolution)
         all_sprites.add(e)
-        all_enemies.add(e)
+
+
 
 
     # Tomando dano:
