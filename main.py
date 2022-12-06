@@ -12,11 +12,10 @@ import random as rd
 
 width, heigth = 1200, 800
 resolution = (width, heigth)
-
 def mainGame():
     pygame.display.set_caption('ZOMB.IO')
 
-    surface = pygame.display.set_mode(resolution)
+    
     player = Player(resolution, None)
 
     clock = pygame.time.Clock()
@@ -32,13 +31,22 @@ def mainGame():
     weapon = Weapon(resolution)
     all_sprites.add(weapon)
 
+    screen = pygame.display.set_mode((750, 500))
+    Menu.menu(screen, player)
+
+    surface = pygame.display.set_mode(resolution)
     while 1:
+        pygame.display.set_mode(resolution)
         clock.tick(60)
         player.update()
         surface.fill((0, 0, 0))
         all_sprites.draw(surface)
 
         pressed = pygame.key.get_pressed()
+
+        if pressed[pygame.K_m]:
+            screen = pygame.display.set_mode((750, 500))
+            Menu.menu(screen, player)
 
         if pressed[pygame.K_UP] or pressed[pygame.K_w]:
             player.walk('up')
@@ -103,7 +111,5 @@ def mainGame():
 
 
 pygame.init()
-screen = pygame.display.set_mode((750, 500))
-Menu.menu(screen)
 mainGame()
 

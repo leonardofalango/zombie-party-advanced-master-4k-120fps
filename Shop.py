@@ -32,7 +32,7 @@ def get_gif_frame(img, frame):
     return  img.convert("RGBA")
 
 
-def shop(screen):
+def shop(screen, player):
     gif_img = Image.open("gifundo.gif")
     current_frame = 0
     clock = pygame.time.Clock()
@@ -70,20 +70,22 @@ def shop(screen):
 
         screen.blit(minimalfont.render("Voltar", True, color, None), (38 + 20, 15))
 
-        coins = 25
-        screen.blit(minimalfont.render(f"{coins} coins", True, color, None), (610, 15))
+        screen.blit(minimalfont.render(f"{player.money} coins", True, color, None), (610, 15))
 
         cards = [Card(40, 'AK47', pygame.image.load("Sprites/Guns/sprite_ak471.png"), 70, 100), Card(270, 'USP-S', pygame.image.load("Sprites/Guns/sprite_ak471.png"), 200, 150), Card(500, 'SHOTGUN', pygame.image.load("Sprites/Guns/sprite_Shotgun3.png"), 200, 100)]
 
 
 
         for card in cards:
-            image = pygame.transform.scale(card.img, (150, 150))
-            screen.blit(image, (card.img_x, card.img_y))
+        #     image = pygame.transform.scale(card.img, (150, 150))
             pygame.draw.rect(screen, color_light, [card.x, 60, 200, 250], border_radius=10)
             card.text = shopfont.render(card.text, True, color, None)
 
+        screen.blit(shopfont.render("100 coins", True, color, None), (70, 140))
+        screen.blit(shopfont.render("30 coins", True, color, None), (305, 140))
+        screen.blit(shopfont.render("70 coins", True, color, None), (530, 140))
 
+        #nomes
         screen.blit(cards[0].text, (cards[0].x + 55, 70))
         screen.blit(cards[1].text, (cards[1].x + 45, 70))
         screen.blit(cards[2].text, (cards[2].x + 20, 70))
@@ -95,6 +97,22 @@ def shop(screen):
                 pygame.draw.rect(screen, (29, 0, 57), [btn_x[i], 260, 150, 40], border_radius=10)
             else:
                 pygame.draw.rect(screen, color_dark, [btn_x[i], 260, 150, 40], border_radius=10)
+                
+        for ev in pygame.event.get():
+            if ev.type == pygame.MOUSEBUTTONDOWN:
+                if mouse[0] in range(hover_range[0][0], hover_range[0][1]) and mouse[1] in range(260, 298):
+                    if player.money >= 100:
+                        player.money -= 100
+                        player.weapon = 'ak47'
+                    print('oi')
+                elif mouse[0] in range(hover_range[1][0], hover_range[1][1]) and mouse[1] in range(260, 298):
+                    if player.money >= 30:
+                        player.money -= 30
+                        player.weapon = 'usp'
+                elif mouse[0] in range(hover_range[2][0], hover_range[2][1]) and mouse[1] in range(260, 298):
+                    if player.money >= 70:
+                        player.money -= 70
+                        player.weapon = 'shotgun'
 
         text = minimalfont.render("BUY!", True, color, None)
         screen.blit(text, (btn_x[0] + 50, 265))
@@ -110,6 +128,3 @@ def shop(screen):
         screen.blit(text, (495, 340))
 
         pygame.display.update()
-
-
-shop(screen)

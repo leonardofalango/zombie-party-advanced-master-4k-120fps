@@ -37,6 +37,7 @@ class Enemy(pygame.sprite.Sprite):
                 self.rect.y > (self.__resolution[1] + self.rect.height)):
             self.alive = 0
             self.kill()
+            return True
 
     def walk(self, player):
         destx = player.rect.x
@@ -57,6 +58,7 @@ class Enemy(pygame.sprite.Sprite):
     def damage(self, player):
         self.hp -= player.atk
         print(self.hp)
-        self.is_alive()
+        if self.is_alive():
+            player.money += 1
 
 

@@ -24,6 +24,7 @@ class Player (pygame.sprite.Sprite):
         self.__armour = 0
         self.hp = 1000
         self.__alive = 1
+        self.money = 0
         
     
     def walk(self, direction):

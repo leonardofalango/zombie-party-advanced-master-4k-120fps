@@ -1,3 +1,4 @@
+from msilib import MSICOLINFO_TYPES
 import pygame
 import sys
 from time import sleep
@@ -27,7 +28,7 @@ def get_gif_frame(img, frame):
 global shopping
 
 
-def menu(screen):
+def menu(screen, player):
     gif_img = Image.open("gifundo.gif")
     current_frame = 0
     clock = pygame.time.Clock()
@@ -60,7 +61,7 @@ def menu(screen):
                 if mouse[0] in range(29, 160) and mouse[1] in range(29, 79):
                     shopping = True
                     from Shop import shop
-                    shop(screen)
+                    shop(screen, player)
 
         print(f"x: {mouse[0]} - y: {mouse[1]}")
 
@@ -88,7 +89,5 @@ def menu(screen):
 
         pygame.display.update()
 
-
-menu(screen)
 
 
