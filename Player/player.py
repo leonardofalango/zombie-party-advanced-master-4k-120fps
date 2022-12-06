@@ -18,13 +18,14 @@ class Player (pygame.sprite.Sprite):
 
         self.posx = resolution[0]/2 - self.__width
         self.posy = resolution[1]/2 - self.__height
+        self.resolution = resolution
         
         self.image = pygame.Surface([self.__width, self.__height])
         # self.image.fill((0, 255, 0))
 
         self.rect = self.image.get_rect()
         
-        self.weapon = ak47.Ak47(resolution, self)
+        self.weapon = glock.Glock(resolution, self)
         self.atk = 5
         self.__armour = 0
         self.hp = 250
@@ -42,7 +43,7 @@ class Player (pygame.sprite.Sprite):
         self.walking_images = self.create_images(self.skin + 'Walking/', self.skip_frames)
         self.sprite = self.iddle_images['up-right'][0]
 
-        self.money = 0
+        self.money = 10000
 
 
     def center_camera(self, target):

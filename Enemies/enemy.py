@@ -104,7 +104,3 @@ class Enemy(pygame.sprite.Sprite):
         x = self.sprites[2][self.dead]
         self.dead +=1
         return x
-
-            
-
-         
