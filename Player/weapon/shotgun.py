@@ -4,7 +4,7 @@ import random as rd
 class Shotgun(weapon.Weapon):
     def __init__(self, resolution, player):
         super().__init__(resolution, player, 1.3, 210, 126)
-        super().create_sprites('E:/leonardo-falango/Sprites/Weapons/Shotgun', 3)
+        super().create_sprites('././Sprites/Weapons/Shotgun', 3)
 
     def shoot(self, pos):
         if (self.canfire):

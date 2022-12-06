@@ -130,8 +130,13 @@ tempo_total = 0
 pygame.time.set_timer(pygame.USEREVENT, 10)
 
 all_sprites.add(player.weapon)
-money = 0
+
+#mostrar menu de primeira
+screen = pygame.display.set_mode((750, 500))
+Menu.menu(screen, player)
+
 while 1:
+    pygame.display.set_mode(resolution)
     mouse_pos = pygame.mouse.get_pos()
     player.att_facing(mouse_pos)
     clock.tick(60)
@@ -149,6 +154,10 @@ while 1:
 
 
     pressed = pygame.key.get_pressed()
+
+    if pressed[pygame.K_m]:
+        screen = pygame.display.set_mode((750, 500))
+        Menu.menu(screen, player)
 
     if pressed[pygame.K_UP] or pressed[pygame.K_w]:
         player.walk('up')

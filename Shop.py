@@ -1,5 +1,6 @@
 import pygame
 import sys
+from Player.weapon import glock, shotgun, ak47
 
 pygame.init()
 res = (750, 500)
@@ -103,16 +104,16 @@ def shop(screen, player):
                 if mouse[0] in range(hover_range[0][0], hover_range[0][1]) and mouse[1] in range(260, 298):
                     if player.money >= 100:
                         player.money -= 100
-                        player.weapon = 'ak47'
+                        player.weapon = ak47.Ak47(player.resolution, player)
                     print('oi')
                 elif mouse[0] in range(hover_range[1][0], hover_range[1][1]) and mouse[1] in range(260, 298):
                     if player.money >= 30:
                         player.money -= 30
-                        player.weapon = 'usp'
+                        player.weapon = glock.Glock(player.resolution, player)
                 elif mouse[0] in range(hover_range[2][0], hover_range[2][1]) and mouse[1] in range(260, 298):
                     if player.money >= 70:
                         player.money -= 70
-                        player.weapon = 'shotgun'
+                        player.weapon = shotgun.Shotgun(player.resolution, player)
 
         text = minimalfont.render("BUY!", True, color, None)
         screen.blit(text, (btn_x[0] + 50, 265))
@@ -128,5 +129,3 @@ def shop(screen, player):
         screen.blit(text, (495, 340))
 
         pygame.display.update()
-
-shop()

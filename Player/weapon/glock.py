@@ -5,7 +5,7 @@ from . import bullet, weapon
 class Glock(weapon.Weapon):
     def __init__(self, resolution, player):
         super().__init__(resolution, player, 0.7, 210, 70)
-        super().create_sprites('E:/leonardo-falango/Sprites/Weapons/Glock-Rajada', 5)
+        super().create_sprites('././Sprites/Weapons/Glock-Rajada', 5)
 
     
 
