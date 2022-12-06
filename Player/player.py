@@ -1,3 +1,4 @@
+from traceback import print_tb
 import pygame
 from Player.weapon import glock, shotgun, ak47
 from math import atan2, pi
@@ -26,7 +27,7 @@ class Player (pygame.sprite.Sprite):
         self.weapon = ak47.Ak47(resolution, self)
         self.atk = 5
         self.__armour = 0
-        self.hp = 1000
+        self.hp = 250
         self.__alive = 1
 
         self.facing = 'down'
@@ -35,14 +36,24 @@ class Player (pygame.sprite.Sprite):
         self.antanimation = self.animation
         self.index = 0
         self.angle = 0
+        self.offset = pygame.math.Vector2()
 
         self.iddle_images = self.create_images(self.skin + 'Idle/', self.skip_frames)
         self.walking_images = self.create_images(self.skin + 'Walking/', self.skip_frames)
         self.sprite = self.iddle_images['up-right'][0]
 
-        
+        self.money = 0
+
+
+    def center_camera(self, target):
+        self.offset.x = self.rect.centerx - (self.__width / 2)
+        self.offset.y = self.rect.centery - (self.__height / 2)
+
 
     def walk(self, direction):
+        
+        self.center_camera(self)
+
         if direction == 'up':
             self.rect.y -= self.__walk_distance
         
@@ -65,11 +76,10 @@ class Player (pygame.sprite.Sprite):
         
     
     def take_damage(self, value):
-        value = value * (1-self.__armour)
+        value = value * (1 - self.__armour)
+        print(self.hp)
         self.hp -= value
-        if self.hp <= 0:
-            self.kill()
-            self.__alive = 0
+        
     
     def att_facing(self, mouse_pos):
         self.animation = 'iddle'
@@ -95,6 +105,10 @@ class Player (pygame.sprite.Sprite):
 
 
     def att_sprite(self):
+        if self.hp <= 0:
+            self.__alive = 0
+            self.kill()
+            
         if self.animation == 'walk':
             self.sprite = self.get_sprite(self.walking_images)
         else:

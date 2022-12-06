@@ -25,9 +25,11 @@ player.rect.y = player.posy
 all_enemies = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 timer = 0
+tempo_total = 0
 pygame.time.set_timer(pygame.USEREVENT, 10)
 
 all_sprites.add(player.weapon)
+money = 0
 while 1:
     mouse_pos = pygame.mouse.get_pos()
     player.att_facing(mouse_pos)
@@ -59,6 +61,7 @@ while 1:
     if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
         player.walk('right')
     player.att_sprite()
+    
     # if pygame.sprite.collide_mask(player, weapon):
     #     weapon.kill()
     #     player.atk += 20
@@ -75,7 +78,7 @@ while 1:
 
     for e in all_enemies:
         e.walk(player)
-        surface.blit(pygame.transform.scale(e.att(), (e.width, e.height)), (e.rect.x, e.rect.y))
+        surface.blit(pygame.transform.scale(e.att(player), (e.width, e.height)), (e.rect.x, e.rect.y))
         if (pygame.sprite.spritecollideany(e, bullets)):
             e.damage(player)
 
@@ -83,7 +86,7 @@ while 1:
         bala.shoot()
     
 
-    while (len(all_enemies) < 4):
+    while (len(all_enemies) < 4 + (tempo_total / 100)):
         e = Flying_zombie(resolution)
         all_sprites.add(e)
         all_enemies.add(e)
@@ -112,7 +115,9 @@ while 1:
 
         if event.type == pygame.USEREVENT:
             timer += 0.01
+            tempo_total += 0.01
 
     if (timer >= player.weapon.firerate):
         timer = 0
         player.weapon.canfire = True
+
