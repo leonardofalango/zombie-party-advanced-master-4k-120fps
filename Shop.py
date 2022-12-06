@@ -128,3 +128,5 @@ def shop(screen, player):
         screen.blit(text, (495, 340))
 
         pygame.display.update()
+
+shop()
