@@ -33,7 +33,7 @@ def get_gif_frame(img, frame):
     return  img.convert("RGBA")
 
 
-def shop(screen, player):
+def shop(screen, player, mundo):
     gif_img = Image.open("gifundo.gif")
     current_frame = 0
     clock = pygame.time.Clock()
@@ -71,7 +71,7 @@ def shop(screen, player):
 
         screen.blit(minimalfont.render("Voltar", True, color, None), (38 + 20, 15))
 
-        screen.blit(minimalfont.render(f"{player.money} coins", True, color, None), (610, 15))
+        screen.blit(minimalfont.render(f"{mundo.money} coins", True, color, None), (610, 15))
 
         cards = [Card(40, 'AK47', pygame.image.load("Sprites/Guns/sprite_ak471.png"), 70, 100), Card(270, 'USP-S', pygame.image.load("Sprites/Guns/sprite_ak471.png"), 200, 150), Card(500, 'SHOTGUN', pygame.image.load("Sprites/Guns/sprite_Shotgun3.png"), 200, 100)]
 
@@ -102,17 +102,17 @@ def shop(screen, player):
         for ev in pygame.event.get():
             if ev.type == pygame.MOUSEBUTTONDOWN:
                 if mouse[0] in range(hover_range[0][0], hover_range[0][1]) and mouse[1] in range(260, 298):
-                    if player.money >= 100:
-                        player.money -= 100
+                    if mundo.money >= 100:
+                        mundo.money -= 100
                         player.weapon = ak47.Ak47(player.resolution, player)
                     print('oi')
                 elif mouse[0] in range(hover_range[1][0], hover_range[1][1]) and mouse[1] in range(260, 298):
-                    if player.money >= 30:
-                        player.money -= 30
+                    if mundo.money >= 30:
+                        mundo.money -= 30
                         player.weapon = glock.Glock(player.resolution, player)
                 elif mouse[0] in range(hover_range[2][0], hover_range[2][1]) and mouse[1] in range(260, 298):
-                    if player.money >= 70:
-                        player.money -= 70
+                    if mundo.money >= 70:
+                        mundo.money -= 70
                         player.weapon = shotgun.Shotgun(player.resolution, player)
 
         text = minimalfont.render("BUY!", True, color, None)

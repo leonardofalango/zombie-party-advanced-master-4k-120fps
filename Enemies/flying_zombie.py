@@ -4,9 +4,9 @@ import random as rd
 
 
 class Flying_zombie(Enemy):
-    def __init__(self, resolution):
+    def __init__(self, resolution, mundo):
             
-        super().__init__(resolution, 5, 1, (100, 70), 4)
+        super().__init__(resolution, 5, 1, (100, 70), 4, mundo)
         self.width = 70
         self.height = 130
         super().create_sprites("Sprites/Player/Skin_Zombie_Fast", 3)

@@ -5,6 +5,12 @@ from math import atan2, pi
 from os import listdir
 
 
+def change_size(image, size):
+  return pygame.transform.rotozoom(image, 0, size)
+
+def image_load(path):
+    return pygame.image.load(path).convert_alpha()
+
 class Player (pygame.sprite.Sprite):
     def __init__(self, resolution, skin) -> None:
         super().__init__()
@@ -12,8 +18,8 @@ class Player (pygame.sprite.Sprite):
         self.skin = skin
         self.skip_frames = 6
     
-        self.__width = 120
-        self.__height = 150
+        self.__width = 120 / 2
+        self.__height = 150 / 2
         self.__walk_distance = max(resolution) / 50 * 0.3
 
         self.posx = resolution[0]/2 - self.__width
@@ -43,7 +49,7 @@ class Player (pygame.sprite.Sprite):
         self.walking_images = self.create_images(self.skin + 'Walking/', self.skip_frames)
         self.sprite = self.iddle_images['up-right'][0]
 
-        self.money = 10000
+        
 
 
     def center_camera(self, target):
@@ -108,12 +114,15 @@ class Player (pygame.sprite.Sprite):
     def att_sprite(self):
         if self.hp <= 0:
             self.__alive = 0
-            self.kill()
+            self.kill() 
             
         if self.animation == 'walk':
             self.sprite = self.get_sprite(self.walking_images)
         else:
             self.sprite = self.get_sprite(self.iddle_images)
+
+        self.image = self.sprite
+    
     def get_sprite(self, dic):
         if (self.facing == self.ant and self.animation == self.antanimation):
             self.index += 1
@@ -139,7 +148,7 @@ class Player (pygame.sprite.Sprite):
         aux = []
         for x in sprites_down['down']:
             for j in range(frame_skip):
-                aux.append(pygame.image.load(path + sprite + "/" + x))
+                aux.append(change_size(image_load(path + sprite + "/" + x), 3.5))
 
         out['down-straight'] = aux
 
@@ -147,7 +156,7 @@ class Player (pygame.sprite.Sprite):
 
         for x in sprites_down['down45']:
             for j in range(frame_skip):
-                aux.append(pygame.image.load(path + sprite45 + "/" + x))
+                aux.append(change_size(image_load(path + sprite45 + "/" + x), 3.5))
 
         out['down-right'] = aux
 
@@ -164,14 +173,14 @@ class Player (pygame.sprite.Sprite):
         aux = []
         for x in sprites_down['back']:
             for j in range(frame_skip):
-                aux.append(pygame.image.load(path + sprite_back + "/" + x))
+                aux.append(change_size(image_load(path + sprite_back + "/" + x), 3.5))
 
         out['up-straight'] = aux
 
         aux = []
         for x in sprites_down['back45']:
             for j in range(frame_skip):
-                aux.append(pygame.image.load(path + sprite_back45 + "/" + x))
+                aux.append(change_size(image_load(path + sprite_back45 + "/" + x), 3.5))
 
         out['up-right'] = aux
 

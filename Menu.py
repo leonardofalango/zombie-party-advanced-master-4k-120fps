@@ -28,7 +28,7 @@ def get_gif_frame(img, frame):
 global shopping
 
 
-def menu(screen, player):
+def menu(screen, player, mundo):
     gif_img = Image.open("gifundo.gif")
     current_frame = 0
     clock = pygame.time.Clock()
@@ -57,13 +57,14 @@ def menu(screen, player):
             if ev.type == pygame.MOUSEBUTTONDOWN or ev.type == pygame.MOUSEBUTTONUP:
                 if mouse[0] in range(299, 449) and mouse[1] in range(335, 404):
                     game = True
+                    mundo.reset()
                 
                 if mouse[0] in range(29, 160) and mouse[1] in range(29, 79):
                     shopping = True
                     from Shop import shop
-                    shop(screen, player)
+                    shop(screen, player, mundo)
 
-        print(f"x: {mouse[0]} - y: {mouse[1]}")
+        # print(f"x: {mouse[0]} - y: {mouse[1]}")
 
         # game button
         if mouse[0] in range(299, 449) and mouse[1] in range(335, 404):

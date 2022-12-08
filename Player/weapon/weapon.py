@@ -11,7 +11,7 @@ class Weapon(pygame.sprite.Sprite):
         self.__width = width
         self.__height = height
 
-        self.image = pygame.Surface([self.__width, self.__height])
+        self.image = pygame.Surface([0,0])
 
 
         self.rect = self.image.get_rect()

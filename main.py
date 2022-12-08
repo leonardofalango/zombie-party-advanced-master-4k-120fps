@@ -1,161 +1,194 @@
+from cgitb import reset
+from email.headerregistry import Group
+from telnetlib import GA
 from turtle import goto
 from Enemies.flying_zombie import Flying_zombie
 from Enemies.normal_zombie import Normal_zombie
-from Player import player
+from Player import player as player1
 
 import Menu
 import pygame
 import sys
 import random as rd
+from PIL import Image
 
-def get_enemy_cap(t):
-    return 4 + (t / 100)
+class Game:
+    def pil_to_game(img):
+        data = img.tobytes("raw", "RGBA")
+        return pygame.image.fromstring(data, img.size, "RGBA")
 
-def between(value, min, max):
-    return value >= min or value < max
+    def get_enemy_cap(self, t):
+        return 4 + (t / 100)
 
-def create_enemy(index, resolution):
-    if index == 0:
-        return Normal_zombie(resolution)
-    if index == 1:
-        return Flying_zombie(resolution)
+    def between(self, value, min, max):
+        return value >= min and value < max
 
-def spawn(values):
-    if sum(values) != 100:
-        raise Exception()
+    def create_enemy(self, index, resolution):
+        if index == 0:
+            return Normal_zombie(resolution, self)
+        if index == 1:
+            return Flying_zombie(resolution, self)
+
+    def spawn(self, values):
+        if sum(values) != 100:
+            raise Exception()
+        
+        for i in range(len(values)):
+            v = rd.randint(0,101)
+            if self.between(v, 0 if i == 0 else values[i-1], values[i]):
+                return self.create_enemy(i, self.resolution)
+        return self.create_enemy(0, self.resolution)
+
     
-    for i in range(len(values)):
-        v = rd.randint(0,101)
-        if between(v, 0 if i == 0 else values[i-1], values[i]):
-            return create_enemy(i, resolution)
+    def __init__(self) -> None:
+        width, heigth = 1200, 800
+        self.resolution = (width, heigth)
+        self.all_sprites = 0
+        self.all_enemies = 0
+        
+        self.player_group = pygame.sprite.Group()
+        
 
-width, heigth = 1200, 800
-resolution = (width, heigth)
+        self.player = player1.Player(self.resolution, 'Sprites/Player/Skin1 - ok/')
+        self.player_group.add(self.player)
 
-pygame.init()
+        self.money = 0
+        self.reset()
+        self.img = Image.open("Sprites/Maps/Yes.png")
+    
 
-pygame.display.set_caption('ZOMB.IO')
+    def reset(self):
+        self.player.hp = 250
+        self.all_sprites = pygame.sprite.Group()
+        self.all_sprites.add(self.player)
+        self.player.rect.x = self.player.posx
+        self.player.rect.y = self.player.posy
 
-surface = pygame.display.set_mode(resolution)
-player = player.Player(resolution, 'Sprites/Player/Skin1 - ok/')
+        self.all_enemies = pygame.sprite.Group()
+        self.bullets = pygame.sprite.Group()
+        self.timer = 0
+        self.tempo_total = 0
+        pygame.time.set_timer(pygame.USEREVENT, 10)
 
-clock = pygame.time.Clock()
+        self.all_sprites.add(self.player.weapon)
+    
+    
+    def run(self):
+        pygame.init()
 
-all_sprites = pygame.sprite.Group()
-all_sprites.add(player)
-player.rect.x = player.posx
-player.rect.y = player.posy
+        pygame.display.set_caption('ZOMB.IO')
 
-all_enemies = pygame.sprite.Group()
-bullets = pygame.sprite.Group()
-timer = 0
-tempo_total = 0
-pygame.time.set_timer(pygame.USEREVENT, 10)
-
-all_sprites.add(player.weapon)
-
-
-#mostrar menu de primeira
-screen = pygame.display.set_mode((750, 500))
-Menu.menu(screen, player)
-
-while 1:
-    if(player.hp <= 0):
-        player.hp = 250
-        pygame.display.set_mode((750, 500))
-        Menu.menu(screen, player)
-
-    pygame.display.set_mode(resolution)
-    mouse_pos = pygame.mouse.get_pos()
-    player.att_facing(mouse_pos)
-    clock.tick(60)
-    player.update()
-    surface.fill((0, 0, 0))
-    all_sprites.draw(surface)
+        surface = pygame.display.set_mode(self.resolution)
+        clock = pygame.time.Clock()
 
 
-    if 'down' in player.facing:
-        surface.blit(pygame.transform.scale(player.sprite, (120, 150)), (player.rect.x, player.rect.y))
-        surface.blit(player.weapon.blit[0], player.weapon.blit[1])
-    else:
-        surface.blit(player.weapon.blit[0], player.weapon.blit[1])
-        surface.blit(pygame.transform.scale(player.sprite, (120, 150)), (player.rect.x, player.rect.y))
-
-
-    pressed = pygame.key.get_pressed()
-
-    if pressed[pygame.K_m]:
+        #mostrar menu de primeira
         screen = pygame.display.set_mode((750, 500))
-        Menu.menu(screen, player)
+        Menu.menu(screen, self.player, self)
 
-    if pressed[pygame.K_UP] or pressed[pygame.K_w]:
-        player.walk('up')
+        
+        while 1:
+            if(self.player.hp <= 0):
+                pygame.display.set_mode((750, 500))
+                Menu.menu(screen, self.player, self)
 
-    if pressed[pygame.K_DOWN] or pressed[pygame.K_s]:
-        player.walk('down')
+            pygame.display.set_mode(self.resolution)
+            mouse_pos = pygame.mouse.get_pos()
+            self.player.att_facing(mouse_pos)
+            clock.tick(60)
+            self.player.update()
+            surface.fill((255,255,255))
+            surface.blit(Menu.pil_to_game(self.img.convert("RGBA")), (0,0))
+            self.all_sprites.draw(surface)
+            self.all_enemies.draw(surface)
+            self.player_group.draw(surface)
 
-    if pressed[pygame.K_LEFT] or pressed[pygame.K_a]:
-        player.walk('left')
+            # self.player.sprite = pygame.transform.scale(self.player.sprite, (120, 150))
 
-    if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
-        player.walk('right')
-    player.att_sprite()
-    
-    # if pygame.sprite.collide_mask(player, weapon):
-    #     weapon.kill()
-    #     player.atk += 20
+            if 'down' in self.player.facing:
+                self.player_group.draw(surface)
+                # surface.blit(, (self.player.rect.x, self.player.rect.y))
+                surface.blit(self.player.weapon.blit[0], self.player.weapon.blit[1])
+            else:
+                surface.blit(self.player.weapon.blit[0], self.player.weapon.blit[1])
+                self.player_group.draw(surface)
 
-    collide = pygame.sprite.spritecollideany(player, all_enemies)
-    if collide:
-        player.take_damage(collide.atk)
+            pressed = pygame.key.get_pressed()
+
+            if pressed[pygame.K_m]:
+                screen = pygame.display.set_mode((750, 500))
+                Menu.menu(screen, self.player, self.all_sprites, self.all_enemies, self.timer, self.tempo_total)(screen, self.player, self.all_sprites, self.all_enemies, self.timer, self.tempo_total)
+
+            if pressed[pygame.K_UP] or pressed[pygame.K_w]:
+                self.player.walk('up')
+
+            if pressed[pygame.K_DOWN] or pressed[pygame.K_s]:
+                self.player.walk('down')
+
+            if pressed[pygame.K_LEFT] or pressed[pygame.K_a]:
+                self.player.walk('left')
+
+            if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
+                self.player.walk('right')
+            self.player.att_sprite()
+            
+            # if pygame.sprite.collide_mask(self.player, weapon):
+            #     weapon.kill()
+            #     self.player.atk += 20
+
+            collide = pygame.sprite.spritecollideany(self.player, self.all_enemies)
+            if collide:
+                self.player.take_damage(collide.atk)
 
 
-    collide = pygame.sprite.groupcollide(all_enemies, bullets, False, True)
-    if (collide):
-        for z in collide:
-            z.damage(player)
+            collide = pygame.sprite.groupcollide(self.all_enemies, self.bullets, False, True)
+            if (collide):
+                for z in collide:
+                    z.damage(self.player)
 
-    for e in all_enemies:
-        e.walk(player)
-        surface.blit(pygame.transform.scale(e.att(player), (e.width, e.height)), (e.rect.x, e.rect.y))
-        if (pygame.sprite.spritecollideany(e, bullets)):
-            e.damage(player)
+            for e in self.all_enemies:
+                e.walk(self.player)
+                if (pygame.sprite.spritecollideany(e.hitbox, self.bullets)):
+                    e.damage(self.player)
+                    print("certou")
 
-    for bala in bullets:
-        bala.shoot()
-    
+            for bala in self.bullets:
+                bala.shoot()
+            
 
-    while (len(all_enemies) < get_enemy_cap(tempo_total)):
-        e = spawn([50, 50])
-        all_enemies.add(e)
-        all_sprites.add(e)
-
-
+            while (len(self.all_enemies) < self.get_enemy_cap(self.tempo_total)):
+                e = self.spawn([50, 50])
+                self.all_enemies.add(e)
+                self.all_sprites.add(e)
 
 
-    # Tomando dano:
 
-    # Atirando / Dando dano
-    pygame.display.update()
-    for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.K_SPACE:
-            bala = player.shoot(mouse_pos)
-            try:
-                for i in bala:
-                    all_sprites.add(i)
-                    bullets.add(i)
-            except:
-                pass
 
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit(0)
+            # Tomando dano:
 
-        if event.type == pygame.USEREVENT:
-            timer += 0.01
-            tempo_total += 0.01
+            # Atirando / Dando dano
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.K_SPACE:
+                    bala = self.player.shoot(mouse_pos)
+                    try:
+                        for i in bala:
+                            self.all_sprites.add(i)
+                            self.bullets.add(i)
+                    except:
+                        pass
 
-    if (timer >= player.weapon.firerate):
-        timer = 0
-        player.weapon.canfire = True
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit(0)
 
+                if event.type == pygame.USEREVENT:
+                    self.timer += 0.01
+                    self.tempo_total += 0.01
+
+            if (self.timer >= self.player.weapon.firerate):
+                self.timer = 0
+                self.player.weapon.canfire = True
+
+game = Game()
+game.run()
